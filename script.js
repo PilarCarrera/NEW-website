@@ -1,10 +1,3 @@
-const cvDialog = document.querySelector("[data-cv-dialog]");
-const openCvButtons = document.querySelectorAll("[data-open-cv]");
-const closeCvButton = document.querySelector("[data-close-cv]");
-const contactModal = document.querySelector("[data-contact-modal]");
-const openContactButtons = document.querySelectorAll("[data-open-contact]");
-const closeContactButton = document.querySelector("[data-close-contact]");
-
 async function loadPartial(selector, path) {
   const target = document.querySelector(selector);
   if (!target) return;
@@ -61,59 +54,66 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function openCvDialog() {
+  const cvDialog = document.querySelector("[data-cv-dialog]");
   if (!cvDialog) return;
   cvDialog.showModal();
 }
 
 function closeCvDialog() {
+  const cvDialog = document.querySelector("[data-cv-dialog]");
   if (!cvDialog) return;
   cvDialog.close();
 }
 
-openCvButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    openCvDialog();
-  });
-});
-
-if (closeCvButton) {
-  closeCvButton.addEventListener("click", closeCvDialog);
-}
-
-if (cvDialog) {
-  cvDialog.addEventListener("click", (event) => {
-    if (event.target === cvDialog) {
-      closeCvDialog();
-    }
-  });
-}
-
 function openContactModal() {
+  const contactModal = document.querySelector("[data-contact-modal]");
   if (!contactModal) return;
   contactModal.showModal();
 }
 
 function closeContactModal() {
+  const contactModal = document.querySelector("[data-contact-modal]");
   if (!contactModal) return;
   contactModal.close();
 }
 
-openContactButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
+document.addEventListener("click", (event) => {
+  const openCvTrigger = event.target.closest("[data-open-cv]");
+  if (openCvTrigger) {
+    event.preventDefault();
+    openCvDialog();
+    return;
+  }
+
+  const closeCvTrigger = event.target.closest("[data-close-cv]");
+  if (closeCvTrigger) {
+    event.preventDefault();
+    closeCvDialog();
+    return;
+  }
+
+  const openContactTrigger = event.target.closest("[data-open-contact]");
+  if (openContactTrigger) {
     event.preventDefault();
     openContactModal();
-  });
+    return;
+  }
+
+  const closeContactTrigger = event.target.closest("[data-close-contact]");
+  if (closeContactTrigger) {
+    event.preventDefault();
+    closeContactModal();
+  }
 });
 
-if (closeContactButton) {
-  closeContactButton.addEventListener("click", closeContactModal);
-}
+document.addEventListener("click", (event) => {
+  const cvDialog = document.querySelector("[data-cv-dialog]");
+  if (cvDialog && event.target === cvDialog) {
+    closeCvDialog();
+  }
 
-if (contactModal) {
-  contactModal.addEventListener("click", (event) => {
-    if (event.target === contactModal) {
-      closeContactModal();
-    }
-  });
-}
+  const contactModal = document.querySelector("[data-contact-modal]");
+  if (contactModal && event.target === contactModal) {
+    closeContactModal();
+  }
+});
